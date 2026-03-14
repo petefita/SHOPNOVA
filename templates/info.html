@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShopNova | Information</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f7f7f7;
+    color: #111;
+}
+
+/* Navbar */
+.navbar {
+    background: white;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.navbar a {
+    text-decoration: none;
+    color: #111;
+    margin-left: 20px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* Header */
+.header {
+    background: #111827;
+    color: white;
+    text-align: center;
+    padding: 70px 20px;
+}
+
+.header h1 {
+    margin-bottom: 10px;
+}
+
+/* Content */
+.container {
+    max-width: 900px;
+    margin: 60px auto;
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+/* Tabs */
+.tabs {
+    display: flex;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 30px;
+}
+
+.tab-btn {
+    padding: 12px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    border: none;
+    background: none;
+}
+
+.tab-btn.active {
+    border-bottom: 3px solid #111827;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+h3 {
+    margin-top: 0;
+}
+
+ul {
+    padding-left: 20px;
+}
+
+/* Form */
+input, textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+}
+
+textarea {
+    resize: vertical;
+}
+
+button {
+    background: #111827;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover {
+    background: #1f2937;
+}
+
+/* Footer */
+footer {
+    background: #111;
+    color: white;
+    text-align: center;
+    padding: 30px;
+    margin-top: 80px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="navbar">
+    <div><strong>SHOPNOVA</strong></div>
+    <div>
+        <a href="/">Home</a>
+        <a href="/info">Info</a>
+        <a href="/login">Admin</a>
+    </div>
+</div>
+
+<div class="header">
+    <h1>Welcome to ShopNova</h1>
+    <p>Your Trusted Online Store in Kenya</p>
+</div>
+
+<div class="container">
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="showTab('about')">About</button>
+        <button class="tab-btn" onclick="showTab('privacy')">Privacy</button>
+        <button class="tab-btn" onclick="showTab('returns')">Returns</button>
+        <button class="tab-btn" onclick="showTab('contact')">Contact</button>
+    </div>
+
+    <!-- ABOUT -->
+    <div id="about" class="tab-content active">
+        <h3>About ShopNova</h3>
+        <p>
+            Founded in 2025, ShopNova was created to provide quality and affordable
+            products to customers across Kenya.
+        </p>
+        <p>
+            We focus on fast delivery, trusted products, and excellent customer service.
+        </p>
+    </div>
+
+    <!-- PRIVACY -->
+    <div id="privacy" class="tab-content">
+        <h3>Privacy Policy</h3>
+        <p>
+            At ShopNova, we respect your privacy. We only collect information necessary
+            to process your orders and improve your shopping experience.
+        </p>
+        <ul>
+            <li>Your data is never sold to third parties.</li>
+            <li>Payments are processed securely.</li>
+            <li>We use encrypted connections.</li>
+        </ul>
+    </div>
+
+    <!-- RETURNS -->
+    <div id="returns" class="tab-content">
+        <h3>Return Policy</h3>
+        <p>
+            We accept returns within 7 days of delivery for unused items
+            in original packaging.
+        </p>
+        <ul>
+            <li>Customer must provide proof of purchase.</li>
+            <li>Refunds processed within 3–5 business days.</li>
+            <li>Damaged items should be reported within 24 hours.</li>
+        </ul>
+    </div>
+
+    <!-- CONTACT -->
+    <div id="contact" class="tab-content">
+        <h3>Contact Us</h3>
+
+        <p><strong>Location:</strong> Nairobi, Kenya</p>
+        <p><strong>Phone:</strong> +254796531544</p>
+        <p><strong>Email:</strong> shopnova@gmail.com</p>
+
+        <hr>
+
+        <form method="POST" action="/contact">
+            <input type="text" name="name" placeholder="Your Name" required>
+            <input type="email" name="email" placeholder="Your Email" required>
+            <textarea name="message" rows="4" placeholder="Your Message"></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+    </div>
+
+</div>
+
+<footer>
+    © 2026 ShopNova. All Rights Reserved.
+</footer>
+
+<script>
+function showTab(id) {
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+    event.target.classList.add('active');
+    document.getElementById(id).classList.add('active');
+}
+</script>
+
+</body>
+</html>

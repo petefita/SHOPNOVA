@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHOPNOVA | Checkout</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* SHOPNOVA Color Scheme */
+        :root {
+            --gold-primary: #FFD700;
+            --gold-secondary: #DAA520;
+            --gold-dark: #B8860B;
+            --gold-light: #FFF3C9;
+            --black-absolute: #000000;
+            --black-rich: #0A0A0A;
+            --black-soft: #1A1A1A;
+            --black-medium: #2A2A2A;
+            --text-dim: #AAAAAA;
+            --text-light: #E0E0E0;
+            --cream-bg: #FFF8E7;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--black-rich);
+            color: var(--text-light);
+            min-height: 100vh;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .gold-gradient {
+            background: linear-gradient(135deg, var(--gold-primary), var(--gold-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: var(--black-absolute) !important;
+            border-bottom: 3px solid var(--gold-dark);
+            padding: 15px 0;
+        }
+
+        .navbar-brand {
+            font-size: 32px;
+            font-weight: 800;
+            font-family: 'Playfair Display', serif;
+            background: linear-gradient(135deg, #B8860B, #DAA520, #B8860B);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+
+        .navbar-brand::after {
+            content: '✦';
+            position: absolute;
+            top: -10px;
+            right: -25px;
+            font-size: 20px;
+            color: var(--gold-dark);
+            -webkit-text-fill-color: initial;
+        }
+
+        /* Main Container */
+        .checkout-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            color: white;
+            font-size: 48px;
+            margin-bottom: 40px;
+            position: relative;
+            display: inline-block;
+        }
+
+        h1::before,
+        h1::after {
+            content: '✦';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gold-primary);
+            font-size: 28px;
+        }
+
+        h1::before {
+            left: -50px;
+        }
+
+        h1::after {
+            right: -50px;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--black-soft);
+            border: 2px solid rgba(255, 215, 0, 0.2);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px -15px rgba(0,0,0,0.8);
+        }
+
+        .card-header {
+            background: var(--black-absolute);
+            border-bottom: 2px solid var(--gold-dark);
+            padding: 20px 25px;
+        }
+
+        .card-header h5 {
+            color: var(--gold-primary);
+            margin: 0;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-header h5 i {
+            color: var(--gold-primary);
+        }
+
+        .card-body {
+            padding: 30px;
+            background: var(--black-soft);
+        }
+
+        /* Form Styling */
+        .form-label {
+            color: var(--text-light);
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 15px;
+            letter-spacing: 0.5px;
+        }
+
+        .form-control, .form-select {
+            background: var(--black-medium);
+            border: 2px solid rgba(255, 215, 0, 0.2);
+            border-radius: 8px;
+            padding: 12px 16px;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            background: var(--black-medium);
+            border-color: var(--gold-primary);
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+            color: white;
+            outline: none;
+        }
+
+        .form-control::placeholder {
+            color: var(--text-dim);
+            opacity: 0.6;
+        }
+
+        .form-select option {
+            background: var(--black-medium);
+            color: white;
+        }
+
+        optgroup {
+            color: var(--gold-primary);
+            font-weight: 600;
+            background: var(--black-absolute);
+        }
+
+        .form-text {
+            color: var(--text-dim) !important;
+            font-size: 13px;
+            margin-top: 6px;
+        }
+
+        /* Order Summary */
+        .cart-summary {
+            background: var(--black-soft);
+            border: 2px solid rgba(255, 215, 0, 0.2);
+            border-radius: 12px;
+            padding: 25px;
+            position: sticky;
+            top: 100px;
+        }
+
+        .cart-summary h5 {
+            color: var(--gold-primary);
+            font-size: 24px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--gold-dark);
+        }
+
+        /* Cart Items */
+        #checkoutItems {
+            max-height: 350px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding-right: 10px;
+        }
+
+        #checkoutItems::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        #checkoutItems::-webkit-scrollbar-track {
+            background: var(--black-medium);
+            border-radius: 10px;
+        }
+
+        #checkoutItems::-webkit-scrollbar-thumb {
+            background: var(--gold-primary);
+            border-radius: 10px;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item-image {
+            width: 70px;
+            height: 70px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid var(--gold-primary);
+        }
+
+        .cart-item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .cart-item-details {
+            flex: 1;
+        }
+
+        .cart-item-details h6 {
+            color: white;
+            font-size: 16px;
+            margin-bottom: 5px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .cart-item-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-dim);
+            font-size: 14px;
+        }
+
+        .cart-item-price {
+            color: var(--gold-primary);
+            font-weight: 600;
+        }
+
+        /* Delivery Breakdown */
+        .delivery-breakdown {
+            background: var(--black-medium) !important;
+            border: 1px solid rgba(255, 215, 0, 0.2) !important;
+            border-radius: 10px;
+            padding: 20px !important;
+            margin: 20px 0;
+        }
+
+        .delivery-breakdown h6 {
+            color: var(--gold-primary);
+            font-size: 18px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .delivery-breakdown .d-flex {
+            margin-bottom: 8px;
+            color: var(--text-light);
+        }
+
+        .delivery-breakdown hr {
+            margin: 12px 0;
+            border-color: rgba(255, 215, 0, 0.2);
+        }
+
+        /* Price Displays */
+        #totalWeight {
+            color: var(--text-dim);
+        }
+
+        #deliveryFee {
+            color: var(--gold-primary);
+            font-weight: 600;
+        }
+
+        #itemsTotal, #checkoutTotal {
+            color: var(--gold-primary);
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        #checkoutTotal {
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .grand-total-section {
+            background: var(--black-absolute);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid var(--gold-dark);
+        }
+
+        .grand-total-section .d-flex {
+            margin-bottom: 10px;
+        }
+
+        .grand-total-section strong {
+            color: white;
+            font-size: 18px;
+        }
+
+        /* Buttons */
+        .btn-whatsapp {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 16px;
+            border-radius: 10px;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .btn-whatsapp:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-whatsapp i {
+            font-size: 24px;
+        }
+
+        .btn-outline-gold {
+            background: transparent;
+            border: 2px solid var(--gold-primary);
+            color: var(--gold-primary);
+            font-weight: 600;
+            padding: 16px;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .btn-outline-gold:hover {
+            background: var(--gold-primary);
+            color: var(--black-absolute);
+            transform: translateY(-3px);
+        }
+
+        /* Empty State */
+        .empty-cart {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .empty-cart i {
+            font-size: 60px;
+            color: var(--gold-primary);
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-cart h4 {
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .empty-cart p {
+            color: var(--text-dim);
+            margin-bottom: 20px;
+        }
+
+        /* Loading State */
+        .btn-loading {
+            position: relative;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .btn-loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin-left: -10px;
+            margin-top: -10px;
+            border: 2px solid white;
+            border-radius: 50%;
+            border-right-color: transparent;
+            animation: spin 0.75s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 36px;
+            }
+
+            h1::before, h1::after {
+                display: none;
+            }
+
+            .card-body {
+                padding: 20px;
+            }
+
+            .cart-summary {
+                margin-top: 30px;
+                position: static;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .checkout-container {
+                padding: 20px 15px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <a class="navbar-brand" href="/">SHOPNOVA</a>
+            <div class="d-flex align-items-center gap-3">
+                <span class="text-light">
+                    <i class="fas fa-phone-alt text-warning me-2"></i>+254 700 000 000
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Checkout Container -->
+    <div class="checkout-container">
+        <h1 class="text-center">Secure Checkout</h1>
+
+        <div class="row g-4">
+            <!-- Customer Information Column -->
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>
+                            <i class="fas fa-user-circle"></i>
+                            Customer Information
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="checkoutForm">
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <label for="fullName" class="form-label">Full Name *</label>
+                                    <input type="text" class="form-control" id="fullName" placeholder="John Doe" required>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="phone" class="form-label">Phone Number *</label>
+                                    <input type="tel" class="form-control" id="phone" placeholder="+254 712 345 678" required>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="email" class="form-label">Email Address</label>
+                                    <input type="email" class="form-control" id="email" placeholder="john@example.com">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="area" class="form-label">Delivery Area *</label>
+                                    <select class="form-select" id="area" required>
+                                        <option value="" disabled selected>Select your area</option>
+                                        <optgroup label="Nairobi (Base Rate)">
+                                            <option value="nairobi-central" data-fee="250">Nairobi Central - KSh 250</option>
+                                            <option value="nairobi-westlands" data-fee="300">Westlands - KSh 300</option>
+                                            <option value="nairobi-eastlands" data-fee="280">Eastlands - KSh 280</option>
+                                        </optgroup>
+                                        <optgroup label="Kiambu (+KSh 50)">
+                                            <option value="kiambu-town" data-fee="350">Kiambu Town - KSh 350</option>
+                                            <option value="ruiru" data-fee="350">Ruiru - KSh 350</option>
+                                            <option value="thika" data-fee="400">Thika - KSh 400</option>
+                                        </optgroup>
+                                        <optgroup label="Machakos (+KSh 100)">
+                                            <option value="machakos-town" data-fee="400">Machakos Town - KSh 400</option>
+                                            <option value="atha-river" data-fee="380">Athi River - KSh 380</option>
+                                        </optgroup>
+                                        <optgroup label="Mombasa (+KSh 300)">
+                                            <option value="mombasa-island" data-fee="600">Mombasa Island - KSh 600</option>
+                                            <option value="nyali" data-fee="650">Nyali - KSh 650</option>
+                                        </optgroup>
+                                    </select>
+                                    <div class="form-text">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        Delivery fee based on weight and distance
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="city" class="form-label">Specific Location *</label>
+                                    <input type="text" class="form-control" id="city" placeholder="Street, Building, Landmark" required>
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="additionalNotes" class="form-label">Delivery Instructions (Optional)</label>
+                                    <textarea class="form-control" id="additionalNotes" rows="3" placeholder="e.g., Call on arrival, Gate code, etc."></textarea>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="saveInfo" style="accent-color: var(--gold-primary);">
+                                        <label class="form-check-label text-light" for="saveInfo">
+                                            Save this information for next time
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Payment Information Card -->
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h5>
+                            <i class="fas fa-shield-alt"></i>
+                            Payment Method
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-warning" style="background: rgba(255, 215, 0, 0.1); border: 1px solid var(--gold-primary); color: var(--gold-primary);">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Payment will be collected upon delivery. We accept M-PESA, Cash, and Card.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Summary Column -->
+            <div class="col-lg-4">
+                <div class="cart-summary">
+                    <h5>
+                        <i class="fas fa-shopping-bag me-2"></i>
+                        Your Order
+                    </h5>
+
+                    <!-- Cart Items Container -->
+                    <div id="checkoutItems">
+                        <!-- Items will be loaded here dynamically -->
+                    </div>
+
+                    <!-- Delivery Breakdown -->
+                    <div class="delivery-breakdown">
+                        <h6>
+                            <i class="fas fa-truck me-2"></i>
+                            Delivery Details
+                        </h6>
+                        <div class="d-flex justify-content-between">
+                            <span>Total Weight:</span>
+                            <span id="totalWeight">0 kg</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span>Base Delivery Fee:</span>
+                            <span id="baseDeliveryFee">KSh 0.00</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span>Weight Surcharge:</span>
+                            <span id="weightSurcharge">KSh 0.00</span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between">
+                            <strong>Total Delivery Fee:</strong>
+                            <strong id="deliveryFee">KSh 0.00</strong>
+                        </div>
+                    </div>
+
+                    <!-- Grand Total -->
+                    <div class="grand-total-section">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Subtotal:</span>
+                            <span id="itemsTotal">KSh 0.00</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span>Delivery:</span>
+                            <span id="deliveryTotal">KSh 0.00</span>
+                        </div>
+                        <hr class="my-3" style="border-color: var(--gold-dark);">
+                        <div class="d-flex justify-content-between">
+                            <strong style="font-size: 20px;">Grand Total:</strong>
+                            <strong id="checkoutTotal" style="font-size: 24px;">KSh 0.00</strong>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <button class="btn-whatsapp" onclick="processOrder()" id="whatsappOrderBtn">
+                        <i class="fab fa-whatsapp"></i>
+                        Order via WhatsApp
+                    </button>
+
+                    <a href="/" class="btn-outline-gold mt-3">
+                        <i class="fas fa-arrow-left"></i>
+                        Continue Shopping
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Cart data (this would normally come from localStorage or a cart API)
+        let cart = [];
+        let deliveryFee = 0;
+        const BASE_DELIVERY_FEE = 200; // Base delivery fee for Nairobi
+
+        // Load cart from localStorage
+        function loadCart() {
+            try {
+                const savedCart = localStorage.getItem('shopnovaCart');
+                if (savedCart) {
+                    cart = JSON.parse(savedCart);
+                } else {
+                    // Sample cart data for demonstration
+                    cart = [
+                        {
+                            id: 1,
+                            name: 'Premium Gold Watch',
+                            price: 12500,
+                            quantity: 1,
+                            weight: 0.5,
+                            image: 'https://placehold.co/600x400/1A1A1A/FFD700?text=Watch'
+                        },
+                        {
+                            id: 2,
+                            name: 'Luxury Leather Bag',
+                            price: 8900,
+                            quantity: 2,
+                            weight: 1.2,
+                            image: 'https://placehold.co/600x400/1A1A1A/FFD700?text=Bag'
+                        }
+                    ];
+                }
+            } catch (e) {
+                console.error('Error loading cart:', e);
+                cart = [];
+            }
+
+            updateCheckoutDisplay();
+        }
+
+        // Calculate total weight
+        function calculateTotalWeight() {
+            return cart.reduce((total, item) => total + (item.weight || 0.5) * item.quantity, 0);
+        }
+
+        // Calculate weight surcharge
+        function calculateWeightSurcharge(weight) {
+            if (weight <= 2) return 0;
+            if (weight <= 5) return 100;
+            if (weight <= 10) return 250;
+            return 500; // For heavy items
+        }
+
+        // Update delivery fee based on area and weight
+        function updateDeliveryFee() {
+            const areaSelect = document.getElementById('area');
+            const weight = calculateTotalWeight();
+
+            if (areaSelect.value) {
+                const selectedOption = areaSelect.options[areaSelect.selectedIndex];
+                const baseFee = parseFloat(selectedOption.dataset.fee) || BASE_DELIVERY_FEE;
+                const weightSurcharge = calculateWeightSurcharge(weight);
+
+                deliveryFee = baseFee + weightSurcharge;
+
+                // Update display
+                document.getElementById('baseDeliveryFee').textContent = `KSh ${baseFee.toFixed(2)}`;
+                document.getElementById('weightSurcharge').textContent = `KSh ${weightSurcharge.toFixed(2)}`;
+                document.getElementById('deliveryFee').textContent = `KSh ${deliveryFee.toFixed(2)}`;
+                document.getElementById('deliveryTotal').textContent = `KSh ${deliveryFee.toFixed(2)}`;
+            } else {
+                deliveryFee = 0;
+                document.getElementById('baseDeliveryFee').textContent = 'KSh 0.00';
+                document.getElementById('weightSurcharge').textContent = 'KSh 0.00';
+                document.getElementById('deliveryFee').textContent = 'KSh 0.00';
+                document.getElementById('deliveryTotal').textContent = 'KSh 0.00';
+            }
+
+            updateGrandTotal();
+        }
+
+        // Calculate cart totals
+        function calculateCartTotals() {
+            const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+            const totalWeight = calculateTotalWeight();
+
+            return { subtotal, totalWeight };
+        }
+
+        // Update grand total
+        function updateGrandTotal() {
+            const { subtotal } = calculateCartTotals();
+            const grandTotal = subtotal + deliveryFee;
+
+            document.getElementById('checkoutTotal').textContent = `KSh ${grandTotal.toFixed(2)}`;
+        }
+
+        // Update checkout display
+        function updateCheckoutDisplay() {
+            const checkoutItems = document.getElementById('checkoutItems');
+            const { subtotal, totalWeight } = calculateCartTotals();
+
+            if (cart.length === 0) {
+                checkoutItems.innerHTML = `
+                    <div class="empty-cart">
+                        <i class="fas fa-shopping-bag"></i>
+                        <h4>Your cart is empty</h4>
+                        <p>Add some luxury items to your cart</p>
+                        <a href="/" class="btn-outline-gold" style="display: inline-block; padding: 12px 30px; width: auto;">
+                            Shop Now
+                        </a>
+                    </div>
+                `;
+
+                document.getElementById('whatsappOrderBtn').disabled = true;
+                document.getElementById('whatsappOrderBtn').style.opacity = '0.5';
+            } else {
+                let itemsHtml = '';
+
+                cart.forEach(item => {
+                    itemsHtml += `
+                        <div class="cart-item">
+                            <div class="cart-item-image">
+                                <img src="${item.image || 'https://placehold.co/600x400/1A1A1A/FFD700?text=Item'}"
+                                     alt="${item.name}"
+                                     onerror="this.src='https://placehold.co/600x400/1A1A1A/FFD700?text=Item'">
+                            </div>
+                            <div class="cart-item-details">
+                                <h6>${item.name}</h6>
+                                <div class="cart-item-meta">
+                                    <span>Qty: ${item.quantity}</span>
+                                    <span class="cart-item-price">KSh ${(item.price * item.quantity).toFixed(2)}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                checkoutItems.innerHTML = itemsHtml;
+                document.getElementById('totalWeight').textContent = `${totalWeight.toFixed(1)} kg`;
+                document.getElementById('itemsTotal').textContent = `KSh ${subtotal.toFixed(2)}`;
+
+                document.getElementById('whatsappOrderBtn').disabled = false;
+                document.getElementById('whatsappOrderBtn').style.opacity = '1';
+            }
+
+            updateDeliveryFee();
+        }
+
+        // Process order via WhatsApp
+        function processOrder() {
+            const fullName = document.getElementById('fullName').value;
+            const phone = document.getElementById('phone').value;
+            const area = document.getElementById('area');
+            const city = document.getElementById('city').value;
+            const notes = document.getElementById('additionalNotes').value;
+
+            // Validate required fields
+            if (!fullName || !phone || !area.value || !city) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            if (cart.length === 0) {
+                alert('Your cart is empty');
+                return;
+            }
+
+            // Get area name
+            const areaName = area.options[area.selectedIndex].text;
+
+            // Build order message
+            let message = '*SHOPNOVA Order Details*%0A%0A';
+            message += `*Customer:* ${fullName}%0A`;
+            message += `*Phone:* ${phone}%0A`;
+            message += `*Area:* ${areaName}%0A`;
+            message += `*Location:* ${city}%0A%0A`;
+
+            message += '*ORDER ITEMS*%0A';
+            cart.forEach((item, index) => {
+                message += `${index + 1}. ${item.name}%0A`;
+                message += `   Qty: ${item.quantity} x KSh ${item.price.toFixed(2)} = KSh ${(item.price * item.quantity).toFixed(2)}%0A`;
+            });
+
+            message += `%0A*Subtotal:* KSh ${calculateCartTotals().subtotal.toFixed(2)}%0A`;
+            message += `*Delivery Fee:* KSh ${deliveryFee.toFixed(2)}%0A`;
+            message += `*Total Weight:* ${calculateTotalWeight().toFixed(1)} kg%0A`;
+            message += `*Grand Total:* KSh ${(calculateCartTotals().subtotal + deliveryFee).toFixed(2)}%0A%0A`;
+
+            if (notes) {
+                message += `*Notes:* ${notes}%0A%0A`;
+            }
+
+            message += '_Thank you for shopping with SHOPNOVA!_';
+
+            // WhatsApp number (replace with your actual number)
+            const whatsappNumber = '254700000000';
+
+            // Open WhatsApp
+            window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
+
+            // Show success message
+            alert('Redirecting to WhatsApp to complete your order!');
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCart();
+
+            // Add change listener to area select
+            document.getElementById('area').addEventListener('change', updateDeliveryFee);
+
+            // Add input listeners for form validation
+            const requiredFields = ['fullName', 'phone', 'city'];
+            requiredFields.forEach(field => {
+                document.getElementById(field).addEventListener('input', function() {
+                    if (this.value.trim()) {
+                        this.style.borderColor = 'var(--gold-primary)';
+                    } else {
+                        this.style.borderColor = 'rgba(255, 215, 0, 0.2)';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopNova Admin</title>
+    <style>
+        /* Base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            height: 100vh;
+            position: fixed;
+            background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            padding: 2rem 0;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .sidebar button {
+            width: 100%;
+            background: none;
+            border: none;
+            color: #94a3b8;
+            padding: 1rem 1.5rem;
+            text-align: left;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar button i {
+            width: 20px;
+            font-size: 1.1rem;
+        }
+
+        .sidebar button:hover {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .sidebar button.active {
+            background: linear-gradient(90deg, #4f46e5, #7c3aed);
+            color: white;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        /* Main content */
+        .main {
+            margin-left: 260px;
+            padding: 2rem;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            background: white;
+            padding: 1.5rem 2rem;
+            border-radius: 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1e293b, #334155);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #f1f5f9;
+            padding: 0.5rem 1rem;
+            border-radius: 40px;
+        }
+
+        .user-info i {
+            color: #4f46e5;
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 1.8rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+            border: 1px solid #eef2f6;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin-bottom: 2rem;
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 30px rgba(0,0,0,0.05);
+        }
+
+        .card h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card h3 i {
+            color: #4f46e5;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #334155;
+            font-size: 0.9rem;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            background: #f8fafc;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #4f46e5;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(79, 70, 229, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 0.4rem 1rem;
+            font-size: 0.85rem;
+        }
+
+        /* Image preview */
+        .image-preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .image-preview-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid #e2e8f0;
+        }
+
+        .image-preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-preview-item button {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(220, 38, 38, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .image-preview-item button:hover {
+            background: #dc2626;
+            transform: scale(1.1);
+        }
+
+        /* Table styles */
+        .table-container {
+            overflow-x: auto;
+            border-radius: 16px;
+            border: 1px solid #eef2f6;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f8fafc;
+            padding: 1rem;
+            font-weight: 600;
+            color: #475569;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #eef2f6;
+            color: #334155;
+        }
+
+        tr:hover td {
+            background: #f8fafc;
+        }
+
+        /* Badges */
+        .badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .badge.pending { background: #fef3c7; color: #92400e; }
+        .badge.processing { background: #dbeafe; color: #1e40af; }
+        .badge.completed { background: #d1fae5; color: #065f46; }
+        .badge.cancelled { background: #fee2e2; color: #991b1b; }
+
+        /* Alert */
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.3s ease;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border-left: 4px solid #059669;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border-left: 4px solid #dc2626;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Two column layout */
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        /* Stats cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 1px solid #eef2f6;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .stat-info h4 {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-info span {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        /* Loading spinner */
+        .loading-spinner {
+            text-align: center;
+            padding: 3rem;
+            color: #94a3b8;
+        }
+
+        .loading-spinner i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Section visibility */
+        .section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Management lists */
+        .management-list {
+            list-style: none;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #eef2f6;
+            border-radius: 12px;
+        }
+
+        .management-list li {
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid #eef2f6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .management-list li:last-child {
+            border-bottom: none;
+        }
+
+        .management-list li:hover {
+            background: #f8fafc;
+        }
+    </style>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<div class="sidebar">
+    <h2>ShopNova</h2>
+    <button class="tab active" onclick="showSection('add')">
+        <i class="fas fa-plus-circle"></i>
+        Add Product
+    </button>
+    <button class="tab" onclick="showSection('products')">
+        <i class="fas fa-box"></i>
+        Products
+    </button>
+    <button class="tab" onclick="showSection('orders')">
+        <i class="fas fa-shopping-cart"></i>
+        Orders
+    </button>
+    <button class="tab" onclick="showSection('manage')">
+        <i class="fas fa-tags"></i>
+        Brands & Categories
+    </button>
+    <button onclick="location.href='/logout'" style="margin-top: auto;">
+        <i class="fas fa-sign-out-alt"></i>
+        Logout
+    </button>
+</div>
+
+<div class="main">
+    <div class="header">
+        <h1>Admin Dashboard</h1>
+        <div class="user-info">
+            <i class="fas fa-user-circle"></i>
+            <span>Welcome, Admin</span>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid" id="statsContainer" style="display: none;">
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-box"></i></div>
+            <div class="stat-info">
+                <h4>Total Products</h4>
+                <span id="totalProducts">0</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-shopping-cart"></i></div>
+            <div class="stat-info">
+                <h4>Total Orders</h4>
+                <span id="totalOrders">0</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-tag"></i></div>
+            <div class="stat-info">
+                <h4>Brands</h4>
+                <span id="totalBrands">0</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-folder"></i></div>
+            <div class="stat-info">
+                <h4>Categories</h4>
+                <span id="totalCategories">0</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Container -->
+    <div id="alertContainer"></div>
+
+    <!-- ADD PRODUCT SECTION -->
+    <div id="add" class="section active">
+        <div class="row">
+            <!-- Product Form -->
+            <div class="card">
+                <h3><i class="fas fa-plus-circle"></i> Create New Product</h3>
+                <form id="addProductForm" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label><i class="fas fa-tag"></i> Product Name</label>
+                        <input type="text" name="name" placeholder="e.g., Premium Wireless Headphones" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-building"></i> Brand</label>
+                        <div style="display: flex; gap: 10px;">
+                            <select name="brand" id="brandSelect" style="flex: 1;" required>
+                                <option value="">Select Brand</option>
+                            </select>
+                            <button type="button" class="btn btn-success btn-sm" onclick="showAddBrandModal()" style="width: auto;">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-list"></i> Category</label>
+                        <div style="display: flex; gap: 10px;">
+                            <select name="category" id="categorySelect" style="flex: 1;" required>
+                                <option value="">Select Category</option>
+                            </select>
+                            <button type="button" class="btn btn-success btn-sm" onclick="showAddCategoryModal()" style="width: auto;">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-dollar-sign"></i> Pricing</label>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <input type="number" step="0.01" name="market_price" placeholder="Market Price" required>
+                            <input type="number" step="0.01" name="selling_price" placeholder="Selling Price" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-cubes"></i> Stock & Weight</label>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <input type="number" name="stock" placeholder="Stock Quantity" required>
+                            <input type="number" step="0.01" name="weight" placeholder="Weight (kg)">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-images"></i> Product Images</label>
+                        <input type="file" name="images" multiple accept="image/*" onchange="previewImages(this)">
+                        <div class="image-preview-grid" id="imagePreview"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-align-left"></i> Description</label>
+                        <textarea name="description" rows="4" placeholder="Product description..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        Add Product
+                    </button>
+                </form>
+            </div>
+
+            <!-- Live Preview Card -->
+            <div class="card">
+                <h3><i class="fas fa-eye"></i> Live Preview</h3>
+                <div style="text-align: center;">
+                    <!-- Main Preview Image -->
+                    <div style="background: #f8fafc; border-radius: 12px; padding: 1rem; margin-bottom: 1rem;">
+                        <img id="preview-main-image" src="https://via.placeholder.com/300x200?text=Product+Image" 
+                             style="max-width: 100%; max-height: 200px; object-fit: contain; border-radius: 8px;">
+                    </div>
+
+                    <!-- Thumbnail Previews -->
+                    <div class="image-preview-grid" id="preview-thumbnails" style="margin-bottom: 1rem;"></div>
+
+                    <h4 id="preview-name" style="margin: 1rem 0 0.5rem;">Product Name</h4>
+                    
+                    <div style="margin: 1rem 0;">
+                        <span style="font-size: 1.5rem; font-weight: 700; color: #4f46e5;" id="preview-price">KSh 0.00</span>
+                        <span style="text-decoration: line-through; color: #94a3b8; margin-left: 10px;" id="preview-market">KSh 0.00</span>
+                        <span class="badge" style="background: #4f46e5; color: white; margin-left: 10px;" id="preview-discount"></span>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; text-align: left; background: #f8fafc; padding: 1rem; border-radius: 12px;">
+                        <div><small>Brand</small><br><strong id="preview-brand">—</strong></div>
+                        <div><small>Category</small><br><strong id="preview-category">—</strong></div>
+                        <div><small>Stock</small><br><strong id="preview-stock">0</strong></div>
+                        <div><small>Weight</small><br><strong id="preview-weight">0 kg</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PRODUCTS SECTION -->
+    <div id="products" class="section">
+        <div class="card">
+            <h3><i class="fas fa-boxes"></i> All Products</h3>
+            <div class="table-container">
+                <table id="productsTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Brand</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="8" class="loading-spinner">
+                                <i class="fas fa-spinner fa-spin"></i>
+                                <div>Loading products...</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ORDERS SECTION -->
+    <div id="orders" class="section">
+        <div class="card">
+            <h3><i class="fas fa-truck"></i> Orders</h3>
+            <div id="ordersList" class="loading-spinner">
+                <i class="fas fa-spinner fa-spin"></i>
+                <div>Loading orders...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MANAGEMENT SECTION -->
+    <div id="manage" class="section">
+        <div class="row">
+            <!-- Brands Card -->
+            <div class="card">
+                <h3><i class="fas fa-building"></i> Brands Management</h3>
+                <div style="display: flex; gap: 10px; margin-bottom: 1.5rem;">
+                    <input type="text" id="newBrand" placeholder="Enter brand name" style="flex: 1;">
+                    <button class="btn btn-success" onclick="addBrand()">
+                        <i class="fas fa-plus"></i> Add
+                    </button>
+                </div>
+                <ul class="management-list" id="brandsList">
+                    <li class="loading-spinner" style="border: none;">
+                        <i class="fas fa-spinner fa-spin"></i> Loading...
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Categories Card -->
+            <div class="card">
+                <h3><i class="fas fa-folder"></i> Categories Management</h3>
+                <div style="display: flex; gap: 10px; margin-bottom: 1.5rem;">
+                    <input type="text" id="newCategory" placeholder="Enter category name" style="flex: 1;">
+                    <button class="btn btn-success" onclick="addCategory()">
+                        <i class="fas fa-plus"></i> Add
+                    </button>
+                </div>
+                <ul class="management-list" id="categoriesList">
+                    <li class="loading-spinner" style="border: none;">
+                        <i class="fas fa-spinner fa-spin"></i> Loading...
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modals -->
+<div id="brandModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 1000;">
+    <div style="background: white; padding: 2rem; border-radius: 16px; width: 400px;">
+        <h3 style="margin-bottom: 1.5rem;">Add New Brand</h3>
+        <input type="text" id="modalNewBrand" placeholder="Brand name" style="margin-bottom: 1.5rem;">
+        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+            <button class="btn" onclick="hideModal('brandModal')">Cancel</button>
+            <button class="btn btn-primary" onclick="addBrandFromModal()">Add Brand</button>
+        </div>
+    </div>
+</div>
+
+<div id="categoryModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 1000;">
+    <div style="background: white; padding: 2rem; border-radius: 16px; width: 400px;">
+        <h3 style="margin-bottom: 1.5rem;">Add New Category</h3>
+        <input type="text" id="modalNewCategory" placeholder="Category name" style="margin-bottom: 1.5rem;">
+        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+            <button class="btn" onclick="hideModal('categoryModal')">Cancel</button>
+            <button class="btn btn-primary" onclick="addCategoryFromModal()">Add Category</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// Show modal functions
+function showAddBrandModal() {
+    document.getElementById('brandModal').style.display = 'flex';
+}
+
+function showAddCategoryModal() {
+    document.getElementById('categoryModal').style.display = 'flex';
+}
+
+function hideModal(modalId) {
+    document.getElementById(modalId).style.display = 'none';
+}
+
+// Show section function
+function showSection(id) {
+    document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(btn => btn.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.target.classList.add('active');
+
+    // Load data when switching sections
+    if (id === 'products') {
+        loadProducts();
+    } else if (id === 'orders') {
+        loadOrders();
+    } else if (id === 'manage') {
+        loadBrandsAndCategories();
+    } else if (id === 'add') {
+        loadBrandsAndCategoriesForForm();
+    }
+}
+
+// Show alert function
+function showAlert(message, type = 'success') {
+    const alertContainer = document.getElementById('alertContainer');
+    const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+    alertContainer.innerHTML = `
+        <div class="alert alert-${type}">
+            <i class="fas ${icon}"></i>
+            ${message}
+        </div>
+    `;
+
+    setTimeout(() => {
+        alertContainer.innerHTML = '';
+    }, 5000);
+}
+
+// Image preview function
+function previewImages(input) {
+    const preview = document.getElementById('imagePreview');
+    const mainPreview = document.getElementById('preview-main-image');
+    const thumbnails = document.getElementById('preview-thumbnails');
+    preview.innerHTML = '';
+    thumbnails.innerHTML = '';
+
+    if (input.files && input.files.length > 0) {
+        Array.from(input.files).forEach((file, index) => {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                // Add to form preview
+                const previewItem = document.createElement('div');
+                previewItem.className = 'image-preview-item';
+                previewItem.innerHTML = `
+                    <img src="${e.target.result}" alt="Preview">
+                    <button type="button" onclick="this.parentElement.remove()">×</button>
+                `;
+                preview.appendChild(previewItem);
+
+                // Add to live preview thumbnails
+                const thumbItem = document.createElement('div');
+                thumbItem.className = 'image-preview-item';
+                thumbItem.style.cursor = 'pointer';
+                thumbItem.onclick = () => mainPreview.src = e.target.result;
+                thumbItem.innerHTML = `<img src="${e.target.result}" alt="Thumbnail">`;
+                thumbnails.appendChild(thumbItem);
+
+                // Set first image as main preview
+                if (index === 0) {
+                    mainPreview.src = e.target.result;
+                }
+            }
+
+            reader.readAsDataURL(file);
+        });
+    } else {
+        mainPreview.src = 'https://via.placeholder.com/300x200?text=Product+Image';
+    }
+}
+
+// Live preview updates
+document.querySelectorAll('#addProductForm input, #addProductForm select, #addProductForm textarea').forEach(input => {
+    input.addEventListener('input', function() {
+        updateLivePreview();
+    });
+    input.addEventListener('change', function() {
+        updateLivePreview();
+    });
+});
+
+function updateLivePreview() {
+    // Update name
+    document.getElementById('preview-name').textContent = 
+        document.querySelector('input[name="name"]').value || 'Product Name';
+
+    // Update prices
+    const selling = parseFloat(document.querySelector('input[name="selling_price"]').value) || 0;
+    const market = parseFloat(document.querySelector('input[name="market_price"]').value) || 0;
+    
+    document.getElementById('preview-price').textContent = `KSh ${selling.toFixed(2)}`;
+    
+    if (market > 0) {
+        document.getElementById('preview-market').textContent = `KSh ${market.toFixed(2)}`;
+        if (selling < market) {
+            const discount = Math.round(((market - selling) / market) * 100);
+            document.getElementById('preview-discount').textContent = `${discount}% OFF`;
+        } else {
+            document.getElementById('preview-discount').textContent = '';
+        }
+    }
+
+    // Update other fields
+    const brandSelect = document.getElementById('brandSelect');
+    const categorySelect = document.getElementById('categorySelect');
+    
+    document.getElementById('preview-brand').textContent = 
+        brandSelect.options[brandSelect.selectedIndex]?.text || '—';
+    document.getElementById('preview-category').textContent = 
+        categorySelect.options[categorySelect.selectedIndex]?.text || '—';
+    document.getElementById('preview-stock').textContent = 
+        document.querySelector('input[name="stock"]').value || '0';
+    document.getElementById('preview-weight').textContent = 
+        (document.querySelector('input[name="weight"]').value || '0') + ' kg';
+}
+
+// Load brands and categories for form
+async function loadBrandsAndCategoriesForForm() {
+    try {
+        const response = await fetch('/admin/brands-categories');
+        const data = await response.json();
+
+        const brandSelect = document.getElementById('brandSelect');
+        const categorySelect = document.getElementById('categorySelect');
+
+        brandSelect.innerHTML = '<option value="">Select Brand</option>' +
+            data.brands.map(b => `<option value="${b.name}">${b.name}</option>`).join('');
+
+        categorySelect.innerHTML = '<option value="">Select Category</option>' +
+            data.categories.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+    } catch (error) {
+        console.error('Error loading brands and categories:', error);
+    }
+}
+
+// Add product form submission
+document.getElementById('addProductForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+    const submitBtn = this.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adding...';
+
+    try {
+        const response = await fetch('/admin/product/add', {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            showAlert('Product added successfully!');
+            this.reset();
+            document.getElementById('imagePreview').innerHTML = '';
+            document.getElementById('preview-main-image').src = 'https://via.placeholder.com/300x200?text=Product+Image';
+            document.getElementById('preview-thumbnails').innerHTML = '';
+            updateLivePreview();
+            loadProducts();
+        } else {
+            showAlert(result.error, 'error');
+        }
+    } catch (error) {
+        showAlert('Error adding product: ' + error.message, 'error');
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+    }
+});
+
+// Load products
+async function loadProducts() {
+    const tbody = document.querySelector('#productsTable tbody');
+    tbody.innerHTML = '<tr><td colspan="8" class="loading-spinner"><i class="fas fa-spinner fa-spin"></i><div>Loading products...</div></td></tr>';
+
+    try {
+        const response = await fetch('/admin/products');
+        const products = await response.json();
+
+        if (products.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 3rem;">No products found</td></tr>';
+            document.getElementById('totalProducts').textContent = '0';
+            return;
+        }
+
+        document.getElementById('totalProducts').textContent = products.length;
+
+        tbody.innerHTML = products.map(product => `
+            <tr>
+                <td>#${product.id}</td>
+                <td>
+                    ${product.images && product.images.length > 0
+                        ? `<img src="${product.images[0]}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;">`
+                        : '<i class="fas fa-image fa-2x" style="color: #cbd5e1;"></i>'}
+                </td>
+                <td><strong>${product.name}</strong></td>
+                <td><span class="badge" style="background: #e2e8f0;">${product.brand}</span></td>
+                <td><span class="badge" style="background: #e2e8f0;">${product.category}</span></td>
+                <td><strong style="color: #4f46e5;">KSh ${product.selling_price}</strong></td>
+                <td><span class="badge ${product.stock > 0 ? 'completed' : 'cancelled'}">${product.stock}</span></td>
+                <td>
+                    <button class="btn btn-danger btn-sm" onclick="deleteProduct(${product.id})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+    } catch (error) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: #dc2626; padding: 3rem;">Error loading products</td></tr>';
+        console.error('Error loading products:', error);
+    }
+}
+
+// Delete product
+async function deleteProduct(id) {
+    if (!confirm('Are you sure you want to delete this product?')) return;
+
+    try {
+        const response = await fetch(`/admin/product/${id}`, {
+            method: 'DELETE'
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            showAlert('Product deleted successfully');
+            loadProducts();
+        } else {
+            showAlert(result.error, 'error');
+        }
+    } catch (error) {
+        showAlert('Error deleting product: ' + error.message, 'error');
+    }
+}
+
+// Load orders
+async function loadOrders() {
+    const ordersList = document.getElementById('ordersList');
+    ordersList.innerHTML = '<div class="loading-spinner"><i class="fas fa-spinner fa-spin"></i><div>Loading orders...</div></div>';
+
+    try {
+        const response = await fetch('/admin/orders');
+        const orders = await response.json();
+
+        document.getElementById('totalOrders').textContent = orders.length;
+
+        if (orders.length === 0) {
+            ordersList.innerHTML = '<div style="text-align: center; padding: 3rem;">No orders found</div>';
+            return;
+        }
+
+        ordersList.innerHTML = orders.map(order => `
+            <div style="background: #f8fafc; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <div>
+                        <span style="font-weight: 700;">Order #${order.id}</span>
+                        <span class="badge ${order.status}" style="margin-left: 10px;">${order.status}</span>
+                    </div>
+                    <span style="color: #64748b;">${new Date(order.created_at).toLocaleDateString()}</span>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1rem;">
+                    <div>
+                        <small style="color: #64748b;">Customer</small><br>
+                        <strong>${order.customer_name}</strong>
+                    </div>
+                    <div>
+                        <small style="color: #64748b;">Phone</small><br>
+                        <strong>${order.customer_phone}</strong>
+                    </div>
+                    <div>
+                        <small style="color: #64748b;">City</small><br>
+                        <strong>${order.customer_city || 'N/A'}</strong>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 1rem;">
+                    <small style="color: #64748b;">Items</small><br>
+                    ${order.items.map(item => `
+                        <span style="background: white; padding: 0.2rem 0.5rem; border-radius: 4px; margin-right: 0.5rem; display: inline-block; margin-top: 0.3rem;">
+                            ${item.name} (x${item.quantity})
+                        </span>
+                    `).join('')}
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #e2e8f0; padding-top: 1rem;">
+                    <div>
+                        <strong>Total: KSh ${order.grand_total}</strong>
+                    </div>
+                    <select class="status-select" onchange="updateOrderStatus(${order.id}, this.value)" style="width: auto;">
+                        <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>Pending</option>
+                        <option value="processing" ${order.status === 'processing' ? 'selected' : ''}>Processing</option>
+                        <option value="completed" ${order.status === 'completed' ? 'selected' : ''}>Completed</option>
+                        <option value="cancelled" ${order.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+                    </select>
+                </div>
+            </div>
+        `).join('');
+    } catch (error) {
+        ordersList.innerHTML = '<div style="text-align: center; color: #dc2626; padding: 3rem;">Error loading orders</div>';
+        console.error('Error loading orders:', error);
+    }
+}
+
+// Update order status
+async function updateOrderStatus(orderId, status) {
+    try {
+        const response = await fetch(`/admin/order/${orderId}/status`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ status })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            showAlert('Order status updated');
+            loadOrders();
+        } else {
+            showAlert(result.error, 'error');
+        }
+    } catch (error) {
+        showAlert('Error updating order status: ' + error.message, 'error');
+    }
+}
+
+
+
+
+
+
+// Add brand from modal
+async function addBrandFromModal() {
+    const input = document.getElementById('modalNewBrand');
+    await addBrandFunction(input.value.trim());
+    hideModal('brandModal');
+    input.value = '';
+}
+
+async function addBrandFunction(name) {
+    if (!name) {
+        showAlert('Please enter a brand name', 'error');
+        return;
+    }
+
+    try {
+        const response = await fetch('/admin/brand/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            showAlert('Brand added successfully');
+            loadBrandsAndCategories();
+            loadBrandsAndCategoriesForForm();
+        } else {
+            showAlert(result.error, 'error');
+        }
+    } catch (error) {
+        showAlert('Error adding brand: ' + error.message, 'error');
+    }
+}
+
+
+
+// Add category from modal
+async function addCategoryFromModal() {
+    const input = document.getElementById('modalNewCategory');
+    await addCategoryFunction(input.value.trim());
+    hideModal('categoryModal');
+    input.value = '';
+}
+
+async function addCategoryFunction(name) {
+    if (!name) {
+        showAlert('Please enter a category name', 'error');
+        return;
+    }
+
+    try {
+        const response = await fetch('/admin/category/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            showAlert('Category added successfully');
+            loadBrandsAndCategories();
+            loadBrandsAndCategoriesForForm();
+        } else {
+            showAlert(result.error, 'error');
+        }
+    } catch (error) {
+        showAlert('Error adding category: ' + error.message, 'error');
+    }
+}
+
+
+
+// Add brand from main input
+async function addBrand() {
+    const input = document.getElementById('newBrand');
+    const brandName = input.value.trim();
+
+    if (!brandName) {
+        showAlert('Please enter a brand name', 'error');
+        return;
+    }
+
+    // Disable button to prevent double submission
+    const addBtn = event.target;
+    addBtn.disabled = true;
+    addBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+    try {
+        const response = await fetch('/admin/brand/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ name: brandName })
+        });
+
+        // Check if response is OK
+        if (!response.ok) {
+            const text = await response.text();
+            console.error('Server response:', text);
+            throw new Error(`Server returned ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        if (result.success) {
+            showAlert(result.message || 'Brand added successfully', 'success');
+            input.value = '';
+            await loadBrandsAndCategories();
+            await loadBrandsAndCategoriesForForm();
+        } else {
+            showAlert(result.error || 'Error adding brand', 'error');
+        }
+    } catch (error) {
+        console.error('Error details:', error);
+        showAlert('Error adding brand: ' + error.message, 'error');
+    } finally {
+        // Re-enable button
+        addBtn.disabled = false;
+        addBtn.innerHTML = '<i class="fas fa-plus"></i> Add';
+    }
+}
+
+// Add category from main input
+async function addCategory() {
+    const input = document.getElementById('newCategory');
+    const categoryName = input.value.trim();
+
+    if (!categoryName) {
+        showAlert('Please enter a category name', 'error');
+        return;
+    }
+
+    // Disable button
+    const addBtn = event.target;
+    addBtn.disabled = true;
+    addBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+    try {
+        const response = await fetch('/admin/category/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ name: categoryName })
+        });
+
+        if (!response.ok) {
+            const text = await response.text();
+            console.error('Server response:', text);
+            throw new Error(`Server returned ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        if (result.success) {
+            showAlert(result.message || 'Category added successfully', 'success');
+            input.value = '';
+            await loadBrandsAndCategories();
+            await loadBrandsAndCategoriesForForm();
+        } else {
+            showAlert(result.error || 'Error adding category', 'error');
+        }
+    } catch (error) {
+        console.error('Error details:', error);
+        showAlert('Error adding category: ' + error.message, 'error');
+    } finally {
+        addBtn.disabled = false;
+        addBtn.innerHTML = '<i class="fas fa-plus"></i> Add';
+    }
+}
+
+// Improved load brands and categories function
+async function loadBrandsAndCategories() {
+    const brandsList = document.getElementById('brandsList');
+    const categoriesList = document.getElementById('categoriesList');
+
+    brandsList.innerHTML = '<li class="loading-spinner"><i class="fas fa-spinner fa-spin"></i> Loading...</li>';
+    categoriesList.innerHTML = '<li class="loading-spinner"><i class="fas fa-spinner fa-spin"></i> Loading...</li>';
+
+    try {
+        const response = await fetch('/admin/brands-categories');
+
+        if (!response.ok) {
+            throw new Error(`Server returned ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (!data.success) {
+            throw new Error(data.error || 'Failed to load data');
+        }
+
+        // Update stats
+        document.getElementById('totalBrands').textContent = data.brands.length;
+        document.getElementById('totalCategories').textContent = data.categories.length;
+
+        // Update brands list
+        if (data.brands.length === 0) {
+            brandsList.innerHTML = '<li style="justify-content: center; color: #94a3b8;">No brands added yet</li>';
+        } else {
+            brandsList.innerHTML = data.brands.map(b => `
+                <li>
+                    <span><i class="fas fa-building" style="color: #4f46e5; margin-right: 8px;"></i>${b.name}</span>
+                    <button class="btn btn-danger btn-sm" onclick="deleteBrand(${b.id})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </li>
+            `).join('');
+        }
+
+        // Update categories list
+        if (data.categories.length === 0) {
+            categoriesList.innerHTML = '<li style="justify-content: center; color: #94a3b8;">No categories added yet</li>';
+        } else {
+            categoriesList.innerHTML = data.categories.map(c => `
+                <li>
+                    <span><i class="fas fa-folder" style="color: #4f46e5; margin-right: 8px;"></i>${c.name}</span>
+                    <button class="btn btn-danger btn-sm" onclick="deleteCategory(${c.id})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </li>
+            `).join('');
+        }
+    } catch (error) {
+        console.error('Error loading brands and categories:', error);
+        brandsList.innerHTML = '<li style="justify-content: center; color: #dc2626;">Error loading brands</li>';
+        categoriesList.innerHTML = '<li style="justify-content: center; color: #dc2626;">Error loading categories</li>';
+        showAlert('Error loading data: ' + error.message, 'error');
+    }
+}
+
+// Delete brand function with better error handling
+async function deleteBrand(id) {
+    if (!confirm('Are you sure you want to delete this brand? This action cannot be undone.')) return;
+
+    const deleteBtn = event.target;
+    const originalText = deleteBtn.innerHTML;
+    deleteBtn.disabled = true;
+    deleteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+    try {
+        const response = await fetch(`/admin/brand/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            const text = await response.text();
+            console.error('Server response:', text);
+            throw new Error(`Server returned ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        if (result.success) {
+            showAlert(result.message || 'Brand deleted successfully', 'success');
+            await loadBrandsAndCategories();
+            await loadBrandsAndCategoriesForForm();
+        } else {
+            showAlert(result.error || 'Error deleting brand', 'error');
+        }
+    } catch (error) {
+        console.error('Error deleting brand:', error);
+        showAlert('Error deleting brand: ' + error.message, 'error');
+    } finally {
+        deleteBtn.disabled = false;
+        deleteBtn.innerHTML = originalText;
+    }
+}
+
+// Delete category function with better error handling
+async function deleteCategory(id) {
+    if (!confirm('Are you sure you want to delete this category? This action cannot be undone.')) return;
+
+    const deleteBtn = event.target;
+    const originalText = deleteBtn.innerHTML;
+    deleteBtn.disabled = true;
+    deleteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+    try {
+        const response = await fetch(`/admin/category/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            const text = await response.text();
+            console.error('Server response:', text);
+            throw new Error(`Server returned ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        if (result.success) {
+            showAlert(result.message || 'Category deleted successfully', 'success');
+            await loadBrandsAndCategories();
+            await loadBrandsAndCategoriesForForm();
+        } else {
+            showAlert(result.error || 'Error deleting category', 'error');
+        }
+    } catch (error) {
+        console.error('Error deleting category:', error);
+        showAlert('Error deleting category: ' + error.message, 'error');
+    } finally {
+        deleteBtn.disabled = false;
+        deleteBtn.innerHTML = originalText;
+    }
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    loadBrandsAndCategoriesForForm();
+    // Show stats after loading
+    document.getElementById('statsContainer').style.display = 'grid';
+});
+</script>
+
+</body>
+</html>
