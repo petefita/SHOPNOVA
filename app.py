@@ -580,6 +580,11 @@ def debug_routes():
     return jsonify(routes)
 
 
+with app.app_context():
+    db.create_all()
+    create_admin()
+
+
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
